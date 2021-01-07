@@ -8,6 +8,22 @@ abstract class _TaskListBase with Store {
   @observable
   ObservableList<Task> tasks = <Task>[].asObservable();
 
+  @observable
+  String filter = "";
+
+  @computed
+  List<Task> get filteredList {
+    if (filter.isEmpty) {
+      return tasks;
+    }
+    return tasks.where((task) {
+      return task.title.toLowerCase().contains(filter.toLowerCase());
+    }).toList();
+  }
+
+  @action
+  void setFilter(String value) => filter = value;
+
   @action
   void add(Task task) {
     tasks.add(task);

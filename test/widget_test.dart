@@ -26,23 +26,47 @@ void main() async {
         },
       );
       testWidgets(
-        'Given home page When task is removed Then task disappears from the screen',
+        'Given home page with some tasks When task is removed Then task disappears from the screen',
         (tester) async {
           await tester.pumpWidget(
             MaterialApp(
               home: HomePage(),
             ),
           );
-
           final taskList = locator<TaskList>();
           taskList.add(Task(title: 'Task 1'));
           taskList.add(Task(title: 'Task 2'));
           taskList.add(Task(title: 'Task 3'));
           await tester.pump();
+
           taskList.removeByTitle('Task 2');
           await tester.pump();
 
           expect(find.text('Task 2'), findsNothing);
+        },
+      );
+      testWidgets(
+        'Given home page with some tasks When filter is changed Then tasks get filtered',
+        (tester) async {
+          await tester.pumpWidget(
+            MaterialApp(
+              home: HomePage(),
+            ),
+          );
+          final taskList = locator<TaskList>();
+          taskList.add(Task(title: 'Clean 1'));
+          taskList.add(Task(title: 'Clean 2'));
+          taskList.add(Task(title: 'Work'));
+          taskList.add(Task(title: 'Other Task'));
+          await tester.pump();
+
+          taskList.setFilter('cl');
+          await tester.pump();
+
+          expect(find.text('Clean 1'), findsOneWidget);
+          expect(find.text('Clean 2'), findsOneWidget);
+          expect(find.text('Work'), findsNothing);
+          expect(find.text('OtherTask'), findsNothing);
         },
       );
     },

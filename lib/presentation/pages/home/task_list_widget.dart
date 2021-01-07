@@ -13,11 +13,11 @@ class TaskListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        final taskList = locator<TaskList>();
+        final tasks = locator<TaskList>().filteredList;
         return ListView.builder(
-          itemCount: taskList.tasks.length,
+          itemCount: tasks.length,
           itemBuilder: (context, index) {
-            return TaskWidget(task: taskList.tasks[index]);
+            return TaskWidget(task: tasks[index]);
           },
         );
       },
